@@ -5,14 +5,24 @@ import withData from '../lib/withData'
 import Layout from '../components/Layout'
 
 class MyApp extends App {
+    // Handle Pagination
+    static async getInitialProps({ Component, ctx }) {
+        let pageProps = {}
+        if (Component.getInitialProps) {
+            pageProps = await Component.getInitialProps(ctx)
+        }
+        // this exposes query to the user
+        pageProps.query = ctx.query
+        return { pageProps }
+    }
+
     render() {
-        const { Component, apollo } = this.props
+        const { Component, apollo, pageProps } = this.props
         
         return (
             <Container>
                 <ApolloProvider client={apollo}>
                     <Layout>
-                        <h1>Im on every page</h1>
                         <Component />
                     </Layout>
                 </ApolloProvider>
