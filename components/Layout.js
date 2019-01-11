@@ -23,7 +23,6 @@ const Inner = styled.div`
     max-width: ${props => props.theme.maxWidth};
     margin: 0 auto;
     padding: 2rem;
-    background: ${props => props.theme.red};
 `
 
 injectGlobal`
@@ -61,9 +60,7 @@ class Layout extends Component {
                 <StyledLayout>
                     <Meta />
                     <Header />
-                    <Inner>
-                        { this.props.children }
-                    </Inner>
+                    <Inner>{this.props.children}</Inner>
                 </StyledLayout>
             </ThemeProvider>
         )
