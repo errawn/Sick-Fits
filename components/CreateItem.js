@@ -43,6 +43,27 @@ class CreateItem extends Component {
         this.setState({ [name] : value })
     }
 
+    uploadFile = async e => {
+        console.log('Uploadin File...')
+        const files = e.target.files // get files from input type file
+        const data = new FormData() // initialize new FormData
+        data.append('file', files[0]) // attach the file from input type file to FormData
+        data.append('upload_preset', 'sickfits') // cloudinary upload_preset
+        // upload to cloudinary server
+        const res = await fetch('https://api.cloudinary.com/v1_1/errawnlalata/image/upload/', {
+            method: 'POST',
+            body: data
+        })
+        // parsed json. Used for setting the image state
+        const file = await res.json()
+        console.log(file)
+        // setting the image state
+        this.setState({
+            image: file.secure_url,
+            largeImage: file.eager[0].secure_url
+        })
+    }
+
     render() {
         return (
         <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
@@ -91,6 +112,17 @@ class CreateItem extends Component {
                             required
                             value={this.state.description}
                             onChange={this.handleChange}
+                        />
+                    </label>
+                    <label htmlFor="file">
+                        Image
+                        <input 
+                            type="file" 
+                            id="file" 
+                            name="file" 
+                            required
+                            placeholder="Upload an Image"
+                            onChange={this.uploadFile}
                         />
                     </label>
                     <button type="submit">Submit</button>
