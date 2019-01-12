@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
+import Router from 'next/router'
 
 import Form from './styles/Form'
 import formatMoney from '../lib/formatMoney'
@@ -52,7 +53,10 @@ class CreateItem extends Component {
                 // call the mutation
                 const res = await createItem()
                 // programatically redirect to the newly created item
-                console.log(res)
+                Router.push({
+                    pathname: '/item',
+                    query: { id: res.data.createItem.id }
+                })
             }}>
                 <Error error={error}/>
                 <fieldset disabled={loading} aria-busy={loading}>
