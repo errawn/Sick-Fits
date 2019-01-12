@@ -131,6 +131,7 @@ class CreateItem extends Component {
                             onChange={this.uploadFile}
                         />
                     </label>
+                    {this.state.image && <img src={this.state.image} />}
                     {this.state.uploadFileTouched && <p>Image is still uploading...</p>}
                     <button type="submit" disabled={loading || this.state.uploadFileTouched}>Submit</button>
                 </fieldset>
