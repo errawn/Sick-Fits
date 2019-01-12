@@ -31,9 +31,10 @@ class CreateItem extends Component {
     state = {
         title: 'Samsung s9 ',
         description: 'Phone from Samsung',
-        image: 'samsung-s9.jpg',
-        largeImage: 'large-samsung-s9.jpg',
-        price: 9999
+        image: null,
+        largeImage: null,
+        price: 9999,
+        uploadFileTouched: false
     }
 
     handleChange = e => {
@@ -44,7 +45,9 @@ class CreateItem extends Component {
     }
 
     uploadFile = async e => {
-        console.log('Uploadin File...')
+        this.setState({uploadFileTouched: true})
+        console.log('Uploading File...')
+
         const files = e.target.files // get files from input type file
         const data = new FormData() // initialize new FormData
         data.append('file', files[0]) // attach the file from input type file to FormData
@@ -60,7 +63,8 @@ class CreateItem extends Component {
         // setting the image state
         this.setState({
             image: file.secure_url,
-            largeImage: file.eager[0].secure_url
+            largeImage: file.eager[0].secure_url,
+            uploadFileTouched: false
         })
     }
 
@@ -69,15 +73,17 @@ class CreateItem extends Component {
         <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
         {(createItem, { loading, error }) => (
             <Form onSubmit={async e => {
-                // stops the form from submitting
                 e.preventDefault()
-                // call the mutation
-                const res = await createItem()
-                // programatically redirect to the newly created item
-                Router.push({
-                    pathname: '/item',
-                    query: { id: res.data.createItem.id }
-                })
+                
+                if (this.state.image) { // mutate ONLY if image is uploaded already
+                    // call the mutation
+                    const res = await createItem()
+                    // programatically redirect to the newly created item
+                    Router.push({
+                        pathname: '/item',
+                        query: { id: res.data.createItem.id }
+                    })
+                }
             }}>
                 <Error error={error}/>
                 <fieldset disabled={loading} aria-busy={loading}>
@@ -125,7 +131,8 @@ class CreateItem extends Component {
                             onChange={this.uploadFile}
                         />
                     </label>
-                    <button type="submit">Submit</button>
+                    {this.state.uploadFileTouched && <p>Image is still uploading...</p>}
+                    <button type="submit" disabled={loading || this.state.uploadFileTouched}>Submit</button>
                 </fieldset>
             </Form>
 
