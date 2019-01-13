@@ -109,7 +109,7 @@ class UpdateItem extends Component {
                                     onChange={this.handleChange}
                                 />
                             </label>
-                            <button type="submit" disabled={loading}>Save Changes</button>
+                            <button type="submit" disabled={loading}>Sav{loading ? 'ing' : 'e'} Changes</button>
                         </fieldset>
                     </Form>
                 )}
