@@ -23,8 +23,6 @@ const UPDATE_ITEM_MUTATION = gql`
         $title: String!
         $description: String!
         $price: Int!
-        $image: String
-        $largeImage: String
     ) {
         updateItem( # createItem() is in backend/src/resolver/Mutation.js
             title: $title
@@ -47,28 +45,30 @@ class UpdateItem extends Component {
         this.setState({ [name] : value })
     }
 
+    updateItem = async(e, updateItemMutation) => {
+        e.preventDefault()
+        console.log('Updating Item!!!')
+        const res = await updateItemMutation({
+            variables: {
+                id: this.props.id,
+                ...this.state
+            }
+        })
+        console.log(res)
+    }
+
     render() {
         return (
         <Query query={SINGLE_ITEM_QUERY} variables={{ id: this.props.id }}>
         {({ loading, error, data }) => {
             console.log(data)
             if (loading) return <p>Loading...</p>
+            if (error) return <p>Error</p>
+            if (!data.item) return <p>No item found for id: {this.props.id}</p>
             return (
                 <Mutation mutation={UPDATE_ITEM_MUTATION} variables={this.state}>
-                {(createItem, { loading, error }) => (
-                    <Form onSubmit={async e => {
-                        e.preventDefault()
-                        
-                        if (this.state.image) { // mutate ONLY if image is uploaded already
-                            // call the mutation
-                            const res = await createItem()
-                            // programatically redirect to the newly created item
-                            Router.push({
-                                pathname: '/item',
-                                query: { id: res.data.createItem.id }
-                            })
-                        }
-                    }}>
+                {(updateItem, { loading, error }) => (
+                    <Form onSubmit={e => this.updateItem(e, updateItem)}>
                         <Error error={error}/>
                         <fieldset disabled={loading} aria-busy={loading}>
                             <label htmlFor="title">
@@ -106,7 +106,7 @@ class UpdateItem extends Component {
                                     onChange={this.handleChange}
                                 />
                             </label>
-                            <button type="submit" disabled={loading || this.state.uploadFileTouched}>Submit</button>
+                            <button type="submit" disabled={loading}>Save Changes</button>
                         </fieldset>
                     </Form>
                 )}
