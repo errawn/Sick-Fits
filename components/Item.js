@@ -27,7 +27,7 @@ class Item extends Component {
 
                 <div className="buttonList">
                     <Link href={{
-                        pathname: '/edit',
+                        pathname: '/update',
                         query: { id: item.id }
                     }}>
                         <a>Edit</a>
