@@ -5,7 +5,9 @@ import withData from '../lib/withData'
 import Layout from '../components/Layout'
 
 class MyApp extends App {
-    // Handle Pagination
+    // Check if the initial component to be rendered has
+    // getInitialProps. If so, run it first before
+    // rendering the page
     static async getInitialProps({ Component, ctx }) {
         let pageProps = {}
         if (Component.getInitialProps) {
@@ -23,7 +25,7 @@ class MyApp extends App {
             <Container>
                 <ApolloProvider client={apollo}>
                     <Layout>
-                        <Component />
+                        <Component {...pageProps}/>
                     </Layout>
                 </ApolloProvider>
             </Container>
