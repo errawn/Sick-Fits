@@ -1,7 +1,9 @@
-import Home from './index'
+import SingleItem from '../components/SingleItem'
 
-const Item = () => (
-    <p>Item!</p>
+const Item = ({ query }) => (
+    <div>
+        <SingleItem id={query.id} />
+    </div>
 )
 
 export default Item
