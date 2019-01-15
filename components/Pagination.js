@@ -23,7 +23,6 @@ const Pagination = props => (
         const count = data.itemsConnection.aggregate.count
         const pages = Math.ceil(count / perPage)
         const page = props.page
-        console.log(page)
         return (
             <PaginationStyles>
                 <Link 
@@ -35,7 +34,7 @@ const Pagination = props => (
                 >
                     <a aria-disabled={page <= 1}>Prev</a>
                 </Link>
-                <p>Page {page} of {pages}</p>
+                <p>Page {page} of {pages}. Total: {count}</p>
                 <Link 
                     prefetch
                     href={{
